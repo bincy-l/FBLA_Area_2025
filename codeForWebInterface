@@ -1,0 +1,332 @@
+
+<!--
+Interactive Story Project by Bincy Lawrence (2025)
+Description: This project creates an engaging web-based interactive storytelling experience with animated visuals and dynamic user interactions. Users can choose their story paths across multiple genres (Horror, Adventure, Mystery), making the experience highly immersive and replayable.
+Instructions:
+1. Download the project files.
+2. Open the HTML file in a modern browser.
+3. If issues arise, refresh the page or reopen it. For persistent problems, email bincy.landrews@gmail.com or bincyl@illinois.edu. THANK YOU!!
+-->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Story</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #4facfe, #00f2fe);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            animation: backgroundChange 20s linear infinite;
+        }
+
+        @keyframes backgroundChange {
+            0% { background: linear-gradient(to bottom, #4facfe, #00f2fe); }
+            25% { background: linear-gradient(to bottom, #ff9a9e, #fecfef); }
+            50% { background: linear-gradient(to bottom, #a1c4fd, #c2e9fb); }
+            75% { background: linear-gradient(to bottom, #fbc2eb, #a6c1ee); }
+            100% { background: linear-gradient(to bottom, #4facfe, #00f2fe); }
+        }
+
+        /* Stars Animation */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            from { transform: translateY(-100px); }
+            to { transform: translateY(110vh); }
+        }
+
+        /* Rotating Triangles Animation */
+        .triangles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .triangle {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-bottom: 35px solid rgba(255, 255, 255, 0.6);
+            animation: rotate linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .main-container {
+            text-align: center;
+            padding: 40px;
+            font-size: 2rem; /* Larger font size */
+        }
+
+        .welcome {
+            margin-top: 100px;
+        }
+
+        input[type="text"] {
+            padding: 20px;
+            margin: 20px 0;
+            font-size: 1.8rem;
+            border: 2px solid #333;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 20px 40px;
+            font-size: 2rem;
+            border: none;
+            border-radius: 5px;
+            background: #333;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        button:hover {
+            background: #555;
+            transform: scale(1.1);
+        }
+
+        .game-area {
+            text-align: center;
+        }
+
+        .story-content {
+            font-size: 2rem; /* Larger font size */
+            margin: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            animation: fadeIn 1s ease;
+        }
+
+        .control-buttons {
+            margin-top: 20px;
+        }
+
+        .control-buttons button {
+            background-color: red;
+            margin: 10px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="triangles"></div>
+
+    <div class="main-container">
+        <div class="welcome">
+            <h1>Welcome to the Interactive Story</h1>
+            <p>Enter your name to begin:</p>
+            <input type="text" id="playerName" placeholder="Your name...">
+            <button id="startGame">Start</button>
+        </div>
+
+        <div class="game-area" style="display: none;">
+            <div id="storyTitle">
+                <h2 id="title">STORY TIME!!</h2>
+            </div>
+            <div id="story-text">
+                <p>Welcome to the interactive story experience! Select a genre to begin:</p>
+            </div>
+            <div class="options" id="options">
+                <button onclick="startStory('Horror')">Horror</button>
+                <button onclick="startStory('Adventure')">Adventure</button>
+                <button onclick="startStory('Mystery')">Mystery</button>
+            </div>
+            <div class="control-buttons">
+                <button id="stopButton">Stop</button>
+                <button id="helpButton">Help</button>
+            </div>
+        </div>
+    </div>
+    
+     <!-- Help Content -->
+        <div id="helpContent" style="display: none; padding: 20px; background: #f4f4f9; color: #333; border-radius: 10px;">
+            <header style="background-color: #6200ea; color: white; padding: 10px; text-align: center;">
+                <h1>Interactive Story Instructions</h1>
+            </header>
+            <main>
+            
+                <div class="instructions" style="background: white; padding: 20px; border-radius: 5px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+                    <h2>How to Play</h2>
+                    <ul>
+                        <li>Enter your name to start the game.</li>
+                        <li>Choose a genre to begin your interactive story.</li>
+                        <li>Make choices as you progress through the story.</li>
+                        <li>Use the Stop button to return to the main menu.</li>
+                        <li>Click Help for viewing this page again.</li>
+                        <li>TO CONTINUE WITH THE STORY, PLEASE REFRESH THE PAGE!!</li>
+
+                    </ul>
+                </div>
+            </main>
+            <footer style="text-align: center; margin-top: 20px; font-size: 0.9em; color: #666;">
+                &copy; 2025 Interactive Story
+            </footer>
+        </div>
+<!--    </div>-->
+
+    <script>
+        // Generate stars and triangles with varying speeds
+        const starContainer = document.querySelector('.stars');
+        const triangleContainer = document.querySelector('.triangles');
+
+        for (let i = 0; i < 50; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.width = star.style.height = `${Math.random() * 4 + 2}px`;
+            star.style.top = `${Math.random() * 100}vh`;
+            star.style.left = `${Math.random() * 100}vw`;
+            star.style.animationDuration = `${Math.random() * 7 + 3}s`; // Varying speeds
+            starContainer.appendChild(star);
+        }
+
+        for (let i = 0; i < 20; i++) {
+            const triangle = document.createElement('div');
+            triangle.className = 'triangle';
+            triangle.style.top = `${Math.random() * 100}vh`;
+            triangle.style.left = `${Math.random() * 100}vw`;
+            triangle.style.animationDuration = `${Math.random() * 10 + 5}s`; // Varying speeds
+            triangleContainer.appendChild(triangle);
+        }
+        
+           // Updated story logic with longer, detailed stories
+        const stories = {
+            Horror: {
+                "Escape the Monster": [
+                    { text: "You wake up in a dark room. Thunder crashes outside, and the air feels damp. You hear faint whispers but can't make out the words. Suddenly, two big, yellow eyes pierce the darkness, staring back at you. Your heart races.", options: { "Call out: 'Who's there?'": "A low growl answers. It doesn't sound friendly.", "Stay silent and hold your breath": "The yellow eyes disappear, but you can still feel its presence.", "Search for something to defend yourself": "Your hands fumble in the dark and find... a stale sandwich? Better than nothing, you suppose." } },
+                    { text: "You find a locked door. The whispers grow louder. Do they sound... sarcastic? One even seems to chuckle when you drop the stale sandwich. The creature might be closer than you think.", options: { "Pick the lock with a shoelace (if you even have one)": "You manage to open the lock, but the door creaks like a haunted violin.", "Search the room for another exit": "You stumble over something soft and furry. It growls. Oops!", "Attempt to reason with the creature": "'You don't need to eat me,' you say. It pauses. 'I haven't even showered today.' It considers your logic." } },
+                    { text: "You manage to escape the room, but the hallway is worse. It's long, cold, and eerily empty—like a dentist’s waiting room after hours. The whispers are gone, but now there's a faint hum, like elevator music. Weird.", options: { "Run down the hallway": "You trip over a rug and sprawl out on the floor. Smooth.", "Creep slowly, trying to be stealthy": "Your stealth is impressive... until you sneeze. The hum stops. Uh-oh.", "Call out: 'Can someone turn the music off?'": "The music gets louder. It's now playing 'The Monster Mash.' Classic." } },
+                    { text: "A figure emerges at the end of the hallway, tall and menacing, with glowing eyes and a cape. 'Welcome,' it says in a deep voice. 'To my... humble abode.' It gestures dramatically. The floor shakes slightly. Is this thing rehearsing for a theater audition?", options: { "Compliment its cape": "'Thanks,' it says, clearly flattered. 'I made it myself!'", "Run back the way you came": "Too late! The hallway behind you is gone.", "Pretend to faint": "You dramatically fall to the floor. The creature sighs. 'Really? That’s the best you’ve got?'" } },
+                    { text: "'I need your help,' the creature finally admits. Turns out, it's not here to eat you—it just wants to win 'Creature's Got Talent' but needs a human to teach it how to moonwalk. What do you do?", options: { "Teach it the moonwalk": "'Thank you,' it says tearfully. 'I’ll never forget this.'", "Suggest a different dance move": "'The chicken dance? Really?' It looks skeptical but tries anyway.", "Refuse to help": "'Fine,' it says, stomping away dramatically. You hear it muttering about ungrateful humans." } }
+                ]
+            },
+            Adventure: {
+                "The Lost Treasure": [
+                    { text: "You arrive on a mysterious island rumored to hold a legendary treasure. The beach is warm, the waves are calm, and there's a faint smell of coconuts. But there’s no time to relax. A parrot lands on your shoulder and squawks, 'Don’t trust the coconuts!'", options: { "Thank the parrot for the advice": "'No problem,' it replies. Wait, what?", "Ignore the parrot": "It squawks indignantly and flies off.", "Check the coconuts": "One of them seems... suspiciously heavy. You open it to find a small map!" } },
+                    { text: "Following the map, you enter a dense jungle. The air is thick, and every rustle makes you jump. Suddenly, you hear a growl. A wild boar charges toward you, wearing what looks like sunglasses. Stylish.", options: { "Climb a tree": "You barely make it up in time. The boar stares at you, unimpressed.", "Stand your ground": "The boar pauses, seemingly impressed by your bravery. Or maybe it just likes your shoes.", "Throw a rock": "The boar dodges easily and charges again. Bad idea!" } },
+                    { text: "After escaping the boar, you stumble upon an ancient ruin covered in vines. The door is locked with a riddle carved above it: 'I speak without a mouth and hear without ears. What am I?'", options: { "Answer 'An echo'": "The door creaks open. You’re pretty sure it whispered, 'Nerd.'", "Kick the door": "It doesn’t budge. Now your foot hurts.", "Search for another entrance": "You find a window and crawl through. Graceful." } },
+                    { text: "Inside the ruin, you find a golden chest surrounded by glowing blue symbols. You step closer, and the symbols begin to pulse. A deep voice echoes: 'Only the worthy may claim the treasure.'", options: { "Claim to be worthy": "'We’ll see about that,' the voice replies. The room starts shaking.", "Leave the chest alone": "The symbols fade. The treasure remains untouched.", "Try to grab the chest quickly": "You grab the chest and... nothing happens. Wait, no. The room starts filling with water!" } },
+                    { text: "You finally open the chest to find glittering jewels, gold coins, and... a rubber duck? The voice returns: 'Choose wisely. What you take will determine your fate.'", options: { "Take the jewels": "You’re rich! But the rubber duck lets out a sinister squeak. Hmm.", "Take the gold coins": "They feel oddly warm. You wonder why.", "Take the rubber duck": "The room stops shaking. The duck glows. Turns out it’s the key to the island’s secrets!" } }
+                ]
+            },
+            Mystery: {
+                "Who Did It?": [
+                    { text: "A murder has occurred during a grand party at a mansion. The guests are all suspects. You start with the host, a suspiciously charming man in a top hat. 'I didn’t do it!' he insists, while twirling his mustache. Classic.", options: { "Question the host": "'I was busy planning the dessert menu,' he says. Likely story.", "Check the dessert menu for clues": "It lists 'Death by Chocolate Cake.' Suspicious.", "Investigate the crime scene": "You find a hidden note under the victim’s chair." } },
+                    { text: "The note contains cryptic instructions: 'Meet me where the moon meets the water.' You wonder if it’s a metaphor or just bad poetry.", options: { "Search near the lake": "You find footprints leading to a gazebo.", "Ask the butler for advice": "'Ah, yes,' he says. 'That sounds like the lake.'", "Ignore the note": "The butler sighs. 'Amateurs,' he mutters." } },
+                    { text: "At the gazebo, you discover a hidden passage. Inside, there’s a room filled with strange artifacts—and a framed picture of the host holding a knife. Yikes.", options: { "Confront the host": "He insists it’s a coincidence. Sure, buddy.", "Take the picture as evidence": "The host notices and panics.", "Look for more clues in the passage": "You find a diary belonging to the victim." } },
+                    { text: "The diary reveals a motive: jealousy. The victim had been blackmailing someone at the party. But who?", options: { "Accuse the host": "He breaks down and confesses. Case closed!", "Accuse the butler": "'Really?' he says. 'That’s so cliché.'", "Accuse the victim’s best friend": "She storms off. Guilty much?" } },
+                    { text: "The case is solved, but the butler still looks suspicious. He offers you a slice of cake. 'Death by Chocolate,' he says with a wink. Do you eat it?", options: { "Eat the cake": "Delicious! But now you feel... sleepy.", "Refuse the cake": "Wise choice. The butler smirks.", "Offer the cake to someone else": "The host happily takes it. 'I regret nothing!' he shouts." } }
+                ]
+            }
+        };
+
+        let currentStory = [];
+        let storyIndex = 0;
+
+        document.getElementById('startGame').addEventListener('click', () => {
+            const name = document.getElementById('playerName').value.trim();
+            if (name) {
+                document.querySelector('.welcome').style.display = 'none';
+                document.querySelector('.game-area').style.display = 'block';
+            } else {
+                alert('Please enter your name to proceed.');
+            }
+        });
+
+        document.getElementById('stopButton').addEventListener('click', () => {
+            document.querySelector('.game-area').style.display = 'none';
+            document.querySelector('.welcome').style.display = 'block';
+        });
+
+//        document.getElementById('helpButton').addEventListener('click', () => {
+//            const playerName = document.getElementById('playerName').value.trim();
+////            window.location.href = `help.html?name=${encodeURIComponent(playerName)}`;
+//            const helpContent = document.getElementById('helpContent');
+
+//        });
+        
+        document.getElementById('helpButton').addEventListener('click', () => {
+    const helpContent = document.getElementById('helpContent');
+    const gameArea = document.querySelector('.game-area');
+
+    // Toggle visibility of the help content
+    if (helpContent.style.display === 'none' || helpContent.style.display === '') {
+        helpContent.style.display = 'block';
+        gameArea.style.display = 'none'; // Hide game area when showing help
+    } else {
+        helpContent.style.display = 'none';
+        gameArea.style.display = 'block'; // Show game area when hiding help
+    }
+});
+
+
+        function startStory(genre) {
+            const storyTitles = Object.keys(stories[genre]);
+            const storyChoice = storyTitles[Math.floor(Math.random() * storyTitles.length)];
+            currentStory = stories[genre][storyChoice];
+            storyIndex = 0;
+            nextPart();
+        }
+
+        function nextPart(option = null) {
+            const optionsDiv = document.getElementById("options");
+            const storyText = document.getElementById("story-text");
+
+            if (option) {
+                const nextText = currentStory[storyIndex].options[option];
+                if (nextText) {
+                    storyIndex++;
+                    storyText.innerHTML = `<p>${nextText}</p>`;
+                } else {
+                    storyText.innerHTML = `<p>The story ends here. Refresh to play again.</p>`;
+                    optionsDiv.innerHTML = '';
+                    return;
+                }
+            } else {
+                storyText.innerHTML = `<p>${currentStory[storyIndex].text}</p>`;
+            }
+
+            const options = currentStory[storyIndex]?.options || {};
+            optionsDiv.innerHTML = Object.keys(options)
+                .map(opt => `<button onclick="nextPart('${opt}')">${opt}</button>`)
+                .join('');
+        }
+    </script>
+</body>
+</html>
